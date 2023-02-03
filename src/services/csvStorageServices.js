@@ -37,7 +37,10 @@ exports.getCompanyBySector=async(data)=>{
 exports.getInsertIntoDB=async(data,tagsData)=>{
    const insertedCompanies=await db.Companies.bulkCreate(data);
    const insertedTags=await db.Tags.bulkCreate(tagsData);
-   return {Tags:insertedTags,Companies:insertedCompanies};
+   return data.map(item=>{
+    return {"id":item.companyId,"name":item.companyName,"score":item.companyScore}
+   })
+   
 }
 exports.calculateScore=(companyDetails,scoreDetails)=>{
     
