@@ -13,3 +13,11 @@ exports.validatePost=(req,res,next)=>{
         next();
     }
 }
+exports.validateGetTopCompanies=(req,res,next)=>{
+    if(!req.query.sector){
+        res.status(400).json({error:"sector value missing!", success:false});
+    }
+    else{
+        next();
+    }
+}
