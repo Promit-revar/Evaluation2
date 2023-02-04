@@ -6,11 +6,13 @@ exports.parseCsvData = async (data) => {
     const records = result.data.split('\n');
     records.shift();
     const companyInfo = records.map((item) => {
-
         const companySectorAndId = item.split(',');
         return { companySector: companySectorAndId[1], companyId: companySectorAndId[0] }
     })
-
+    const dataForDbInsert = companyInfo.map((item)=>{
+        return { sector: item.companySector, companyId: item.companyId};
+    });
+    const insertSectorData = await db.Sector.bulkCreate(dataForDbInsert);
     return companyInfo;
 }
 exports.getCompanyById = async (data) => {
