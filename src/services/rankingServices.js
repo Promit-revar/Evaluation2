@@ -5,5 +5,11 @@ exports.getTopCompanies = async (sector) => {
         include: db.Companies,
         
     });
-    return result;
+    return result.sort((element1,element2)=>{
+        if(element1.Companies[0].companyScore>element2.Companies[0].companyScore){
+            return -1;
+        }
+    });
+    
+    
 }
