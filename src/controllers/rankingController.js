@@ -4,5 +4,5 @@ exports.getTopCompanies=async (req,res)=>{
     const topRankedCompanies = topCompanies.map((item,i)=>{
         return {"id":item.companyId,"name":item.Companies[0].companyName,"ceo":item.Companies[0].ceoName,"score":item.Companies[0].score,"ranking":i+1}
     })
-    res.send(topRankedCompanies);
+    res.status(200).json({data:topRankedCompanies});
 }
