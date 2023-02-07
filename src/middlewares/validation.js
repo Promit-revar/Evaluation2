@@ -1,15 +1,22 @@
 const Joi = require("joi");
-const schema= Joi.object({
-    urlLink:Joi.string()
-    .required()
+const postApiDataSchema= Joi.object({
+    urlLink:Joi.string().uri().required()
 
 })
 const updateValidationSchema=Joi.object({
     companyName:Joi.string().required(),
     ceoName:Joi.string().required()
+});
+const checkUUIDSchema = Joi.object({
+    id:Joi.string().guid({
+        version: [
+            'uuidv4',
+            'uuidv5'
+        ]
+    })
 })
-exports.validatePost=(req,res,next)=>{
-    const {error,value}= schema.validate(req.body);
+exports.validatePostApiSave=(req,res,next)=>{
+    const {error,value}= postApiDataSchema.validate(req.body);
     if(error){
         res.status(400).json({error:error});
     }
@@ -26,7 +33,7 @@ exports.validateGetTopCompanies=(req,res,next)=>{
     }
 }
 exports.validateUpdateCompanyDetails=(req,res,next)=>{
-    const {error,value}= updateValidationSchema.validate(req.body);
+    const {error,value}= updateValidationSchema.validate(req.body) && checkUUIDSchema.validate(req.params);
     if(error){
         res.status(400).json({error:error});
     }

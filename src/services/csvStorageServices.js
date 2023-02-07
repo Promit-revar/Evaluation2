@@ -1,7 +1,9 @@
 const axios = require('axios');
 const db = require('../models');
 const utils = require('../utils/csvParser');
+const httpError = require('../../Error/httpError');
 exports.parseCsvData = async (data) => {
+    try{
     const result = await utils.parseCsv(data);
     const records = result.data.split('\n');
     records.shift();
@@ -14,6 +16,10 @@ exports.parseCsvData = async (data) => {
     });
     const insertSectorData = await db.Sector.bulkCreate(dataForDbInsert);
     return companyInfo;
+    }
+    catch(error){
+        throw new httpError("Database Error",500);
+    }
 }
 exports.getCompanyById = async (data) => {
     const companyDetails = await Promise.all(data.map(async (company) => {
@@ -44,7 +50,7 @@ exports.getInsertIntoDB = async (data, tagsData) => {
     })
 
 }
-exports.calculateScore = (companyDetails, scoreDetails) => {
+exports.calculateScoreAndReturnDataObject = (companyDetails, scoreDetails) => {
 
     const scoreData = companyDetails.map((item) => {
         let company;
